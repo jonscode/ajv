@@ -3,12 +3,31 @@
 {{# def.setupKeyword }}
 {{# def.$data }}
 
+var m10{{=$lvl}} = null;
+switch ({{=$schemaValue}}) {
+  case 0.1:
+    m10{{=$lvl}} = 10;
+    break;
+  case 0.01:
+    m10{{=$lvl}} = 100;
+    break;
+  case 0.001:
+    m10{{=$lvl}} = 1000;
+    break;
+  case 0.0001:
+    m10{{=$lvl}} = 10000;
+    break;
+  case 0.00001:
+    m10{{=$lvl}} = 100000;
+    break;
+}
+
 var division{{=$lvl}};
 if ({{?$isData}}
       {{=$schemaValue}} !== undefined && (
       typeof {{=$schemaValue}} != 'number' ||
     {{?}}
-      (division{{=$lvl}} = {{=$data}} / {{=$schemaValue}},
+      (division{{=$lvl}} = (!m10{{=$lvl}} ? {{=$data}} / {{=$schemaValue}} : {{=$data}} * m10{{=$lvl}}),
       {{? it.opts.multipleOfPrecision }}
         Math.abs(Math.round(division{{=$lvl}}) - division{{=$lvl}}) > 1e-{{=it.opts.multipleOfPrecision}}
       {{??}}
